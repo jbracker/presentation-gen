@@ -2,10 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 
-module MetaParser 
-  ( parseMeta, parseMetaFile 
-  , getTitle, getAuthors, getOrganisations
-  , separateBy
+module PresentationGen.MetaParser 
+  ( parseMeta, parseMetaFile
   ) where
 
 import Data.Char
@@ -21,40 +19,8 @@ import qualified Data.Attoparsec.Text as P
 import Control.Monad
 import Control.Applicative
 
-import Debug.Trace
-
-getAuthors :: [(String, String)] -> [(String, [Int])]
-getAuthors meta = map (\(auth,a) -> (auth, map (read . trim) $ separateBy a ','))
-                $ combineAuthorAssocs
-                $ filter (fieldFilter ["Author", "Associated"]) meta
-  where
-    combineAuthorAssocs :: [(String, String)] -> [(String, String)]
-    combineAuthorAssocs (("Author", auth) : ("Associated", assoc) : xs) = 
-      (auth, assoc) : combineAuthorAssocs xs
-    combineAuthorAssocs (("Author", auth) : xs) = 
-      (auth, "") : combineAuthorAssocs xs
-    combineAuthorAssocs (x : xs) = combineAuthorAssocs xs
-    combineAuthorAssocs [] = []
-
-getOrganisations :: [(String, String)] -> [(Int, [String])]
-getOrganisations meta = zip [1..]
-                      $ map ((`separateBy` '\n') . snd)
-                      $ filter (fieldFilter ["Organisation"]) meta
-
-getTitle :: [(String, String)] -> Maybe String
-getTitle meta = listToMaybe 
-              $ map snd 
-              $ filter (fieldFilter ["Title"]) meta
-
-fieldFilter :: [String] -> (String, String) -> Bool
-fieldFilter field (n, _) = n `elem` field
-
-separateBy :: String -> Char -> [String]
-separateBy str sep =
-  let (part, rest) = break (== sep) str
-  in if null rest 
-        then [part] 
-        else part : separateBy (tail rest) sep
+import PresentationGen.Types
+import PresentationGen.Util
 
 -- ----- META INFORMATION PARSER --------------------------------         
 
@@ -99,9 +65,6 @@ pFieldLineValue = do
   when (all isSpace value) $ fail "Value only contains spaces!"
   pLineEnd
   return $ trim $ value
-
-trim :: String -> String
-trim = dropWhileEnd isSpace . dropWhile isSpace
 
 pFieldMultilineValue :: Parser String
 pFieldMultilineValue = do
