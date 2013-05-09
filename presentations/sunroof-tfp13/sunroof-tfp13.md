@@ -62,6 +62,8 @@ Interface / Short description
 
 Calculator Image / Figure Structure / Statistics + Downsides
 
+![The example application](example-application.png)
+
 
 # Conclusion / Related Work / Acknowledgments
 
