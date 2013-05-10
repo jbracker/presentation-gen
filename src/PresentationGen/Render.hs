@@ -50,7 +50,7 @@ htmlSlides = do
         , "{ src: '" ++ resourceDir </> "lib/js/classList.js', condition: function() { return !document.body.classList; } },"
         , "{ src: '" ++ resourceDir </> "plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },"
         --, "{ src: '" ++ resourceDir </> "plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },"
-        , "{ src: '" ++ resourceDir </> "plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },"
+        , "{ src: '" ++ resourceDir </> "plugin/highlight/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },"
         , "{ src: '" ++ resourceDir </> "plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },"
         , "{ src: '" ++ resourceDir </> "plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }"
         , "]"
