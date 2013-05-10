@@ -98,7 +98,7 @@ htmlSlideHead = do
     linkTag "stylesheet" $ resourceDir </> "css/reveal.min.css"
     linkTag "stylesheet" $ resourceDir </> "css/theme" </> theme <.>"css"
     -- Syntax highlight
-    linkTag "stylesheet" $ resourceDir </> "lib/css/zenburn.css"
+    linkTag "stylesheet" $ resourceDir </> "lib/css/idea.css"
     {- Add at some point
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
