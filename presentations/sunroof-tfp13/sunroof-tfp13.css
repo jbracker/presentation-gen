@@ -3,4 +3,16 @@ sup {
   /*vertical-align: super !important;*/
   position: relative; top: -0.5em; font-size: 80%;
   font-size: 80% !important;
-} 
+}
+
+h1,h2,h3,h4,h5,h6 {
+  text-transform: none !important;
+}
+
+h1 {
+  font-size: 2em !important;
+}
+
+h2,h3,h4,h5,h6 {
+  font-size: 2em !important;
+}
