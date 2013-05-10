@@ -24,6 +24,7 @@ htmlSlides :: SlideM Html
 htmlSlides = do
   title <- fromJust `fmap` getTitle
   authors <- getAuthors
+  theme <- getTheme
   resourceDir <- getResourceDir
   titleSlide <- htmlTitleSlide
   slideHead <- htmlSlideHead
@@ -43,7 +44,7 @@ htmlSlides = do
         , "progress: true,"
         , "history: true,"
         , "center: true,"
-        , "theme: 'sky',"
+        , "theme: '" ++ theme ++ "',"
         , "transition: Reveal.getQueryHash().transition || 'default',"
         , "dependencies: ["
         , "{ src: '" ++ resourceDir </> "lib/js/classList.js', condition: function() { return !document.body.classList; } },"
@@ -76,6 +77,7 @@ htmlSlideHead :: SlideM Html
 htmlSlideHead = do
   authors <- (map fst) `fmap` getAuthors
   title <- fromJust `fmap` getTitle
+  theme <- getTheme
   resourceDir <- getResourceDir
   slideDir <- getSlideDir
   slideName <- getSlideName
@@ -94,7 +96,7 @@ htmlSlideHead = do
     metaTag "viewport" "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     -- Reveal.js styles
     linkTag "stylesheet" $ resourceDir </> "css/reveal.min.css"
-    linkTag "stylesheet" $ resourceDir </> "css/theme/default.css"
+    linkTag "stylesheet" $ resourceDir </> "css/theme" </> theme <.>"css"
     -- Syntax highlight
     linkTag "stylesheet" $ resourceDir </> "lib/css/zenburn.css"
     {- Add at some point

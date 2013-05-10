@@ -5,7 +5,7 @@ module PresentationGen.Types
   , SlideM
   , getBaseDir, getResourceDir, getSlideDir
   , getSlideName, getSlides, getSlideMetaData
-  , getTitle, getAuthors, getOrganisations 
+  , getTitle, getAuthors, getOrganisations, getTheme
   , makeSlideConfig
   , setSlides, setSlideMetaData
   ) where
@@ -119,7 +119,13 @@ getTitle = do
          $ map snd 
          $ filter (fieldFilter ["Title"]) meta
 
-
+getTheme :: SlideM String
+getTheme = do
+  meta <- getSlideMetaData
+  return $ maybe "default" id
+         $ listToMaybe 
+         $ map snd 
+         $ filter (fieldFilter ["Theme"]) meta
 
 
 
