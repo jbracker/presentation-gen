@@ -25,6 +25,7 @@ jsCode = do
 
 ## Structure
 
+![Structure of Sunroof](sunroof-structure.png)
 Figure: Structure of Sunroof
 
 
@@ -39,6 +40,8 @@ Expression type / Sunroof class / Table of Types / FFI
 
 
 # Functions & Continuations
+
+![](sunroof-func-cont.png)
 
 Signatures / callcc / Connection Figure
 
@@ -59,6 +62,8 @@ Interface / Short description
 
 
 # Case Study
+
+![](example-structure.png)
 
 Calculator Image / Figure Structure / Statistics + Downsides
 
