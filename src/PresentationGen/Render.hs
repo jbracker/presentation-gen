@@ -186,7 +186,7 @@ blockToHtml b = case b of
                      $ toHtml c
     Null -> return $ return ()
     HorizontalRule -> return $ H.hr
-    RawBlock tag b -> return $ preEscapedToMarkup b
+    RawBlock tag s -> return $ preEscapedToMarkup s
 
   where
     listItem :: [Block] -> SlideM Html
@@ -218,7 +218,7 @@ inlineToHtml l = case l of
     content <- inlinesToHtml t
     return $ H.em $ content
   Code _ c -> return $ H.code $ fromString c
-  RawInline _ s -> return $ H.code $ fromString s
+  RawInline _ s -> return $ preEscapedToMarkup s
   Image alt (url, t) -> do
     realUrl <- makeImageLink url
     return $ H.img ! A.alt (toValue $ concatMap inlineToString alt)
