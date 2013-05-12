@@ -1,109 +1,30 @@
-% Introducing HERMIT<br/>A Plugin for Transforming GHC Core Language Programs
-% <br/>Andrew Farmer<br/>afarmer@ittc.ku.edu<br/><br/>(joint work with Andy Gill, Ed Komp, Neil Sculthorpe, Robert Blair, Jan Bracker, Patrick Flor, Nick Frisby, Adam Howell, Ryan Scott, and Michael Tabone)
-% Functional Programming Group<br/>Information and Telecommunication Technology Center<br/>University of Kansas<br/><br/>April 9, 2013
+# Introducing HERMIT
+
+<h3>A Plugin for Transforming GHC Core Language Programs</h3>
+<p>
+<small>
+  Andrew Farmer<br/>afarmer@ittc.ku.edu<br/><br/>
+  (joint work with Andy Gill, Ed Komp, Neil Sculthorpe, Robert Blair, Jan Bracker, Patrick Flor, Nick Frisby, Adam Howell, Ryan Scott, and Michael Tabone)
+</small>
+</p>
+
+#
+
+- Bla
 
 # Motivation
 
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
+<ul>
+<li class="fragment"> There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
+<li class="fragment"> Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
+<li class="fragment"> We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
     - less time-consuming and error prone than pen-and-paper reasoning
     - no need to modify the source file
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
-    - less time-consuming and error prone than pen-and-paper reasoning
-    - no need to modify the source file
-- Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
-    - less time-consuming and error prone than pen-and-paper reasoning
-    - no need to modify the source file
-- Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
-- But they all operate on Haskell source code (or some variant).
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
-    - less time-consuming and error prone than pen-and-paper reasoning
-    - no need to modify the source file
-- Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
-- But they all operate on Haskell source code (or some variant).
-- Haskell source code?
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
-    - less time-consuming and error prone than pen-and-paper reasoning
-    - no need to modify the source file
-- Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
-- But they all operate on Haskell source code (or some variant).
-- Haskell source code? Haskell 98?
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
-    - less time-consuming and error prone than pen-and-paper reasoning
-    - no need to modify the source file
-- Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
-- But they all operate on Haskell source code (or some variant).
-- Haskell source code? Haskell 98? Haskell 2010?
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
-    - less time-consuming and error prone than pen-and-paper reasoning
-    - no need to modify the source file
-- Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
-- But they all operate on Haskell source code (or some variant).
-- Haskell source code? Haskell 98? Haskell 2010? GHC-extended Haskell?
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
-    - less time-consuming and error prone than pen-and-paper reasoning
-    - no need to modify the source file
-- Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
-- But they all operate on Haskell source code (or some variant).
-- Haskell source code? Haskell 98? Haskell 2010? GHC-extended Haskell? Which extensions?
-
-# Motivation
-
-- There is often a trade-off between the <span style="color:red;">clarity</span> and <span style="color:red;">efficiency</span> of a program.
-- Useful to <span style="color:red;">transform</span> a clear program (specification) into an efficient program (implementation).
-- We want to <span style="color:red;">mechanise</span> such transformations on Haskell programs:
-    - less time-consuming and error prone than pen-and-paper reasoning
-    - no need to modify the source file
-- Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
-- But they all operate on Haskell source code (or some variant).
-- Haskell source code? Haskell 98? Haskell 2010? GHC-extended Haskell? Which extensions?
-- Alternative: <span style="color:red;">GHC Core</span>, GHC’s intermediate language
+<li class="fragment"> Several existing transformation systems for Haskell programs, e.g. HaRe, HERA, PATH, Ultra
+<li class="fragment"> But they all operate on Haskell source code (or some variant).
+<li class="fragment"> Haskell source code? Haskell 98? Haskell 2010? GHC-extended Haskell? Which extensions?
+<li class="fragment"> Alternative: <span style="color:red;">GHC Core</span>, GHC’s intermediate language
+</ul>
 
 # Core
 
