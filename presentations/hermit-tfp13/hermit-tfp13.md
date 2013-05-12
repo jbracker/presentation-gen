@@ -78,6 +78,65 @@ fib n = if n < 2
                     else fib (n - 2 - 1) + fib (n - 2 - 2))
 </code></pre>
 
+# Downloading and Running HERMIT
+
+HERMIT requires GHC 7.6
+
+1. <span style="font-family:monospace;">cabal update</span>
+2. <span style="font-family:monospace;">cabal install hermit</span>
+3. <span style="font-family:monospace;">hermit Fib.hs</span>
+
+The hermit command just invokes GHC with some default flags:
+
+```
+% hermit Fib.hs
+ghc Main.hs -fforce-recomp -O2 -dcore-lint
+    -fsimple-list-literals -fexpose-all-unfoldings
+    -fplugin=HERMIT
+    -fplugin-opt=HERMIT:main:Main:
+```
+
+
+# First Example
+
+```
+import Criterion.Main
+
+main = defaultMain [ bench "20" $ whnf fib 10]
+
+fib :: Int -> Int
+fib n = if n < 2
+        then 1
+        else fib (n - 1) + fib (n - 2)
+```
+
+```
+% hermit Main.hs
+...
+module main:Main where
+  fib ∷ Int -> Int
+  main ∷ IO ()
+  main ∷ IO ()
+hermit<0> consider 'fib
+fib = λ n → ...
+...
+hermit<1> any-call (inline 'fib)
+fib = λ n → ...
+hermit<2> resume 
+%
+```
+
+
+# HERMIT
+
+<div align="center">
+![HERMIT Architecture](arch.png)
+</div>
+
+# Help!
+
+
+
 
 # ((Andrew's talk starts here))
 
@@ -165,24 +224,6 @@ image from http://www.angelfire.com/ks/larrycarter/LC/OldGuardCameron.html
 <div style="clear: both; font-size: x-small;">
 image from http://www.angelfire.com/ks/larrycarter/LC/OldGuardCameron.html
 </div>
-
-# Downloading and Running HERMIT
-
-HERMIT requires GHC 7.6
-
-1. <span style="font-family:monospace;">cabal update</span>
-2. <span style="font-family:monospace;">cabal install hermit</span>
-3. <span style="font-family:monospace;">hermit Main.hs</span>
-
-The hermit command just invokes GHC with some default flags:
-
-```
-% hermit Main.hs
-ghc Main.hs -fforce-recomp -O2 -dcore-lint
-    -fsimple-list-literals -fexpose-all-unfoldings
-    -fplugin=HERMIT
-    -fplugin-opt=HERMIT:main:Main:
-```
 
 # Demonstration: Unrolling Fibonacci
 
