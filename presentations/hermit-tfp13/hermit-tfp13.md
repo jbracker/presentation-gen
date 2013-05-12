@@ -1,10 +1,50 @@
-# Introducing HERMIT
+# How to Interact with a HERMIT
+
+<p>
+<small>
+  Andy Gill<br/><br/>
+  (joint work with Andy Gill, Ed Komp, Neil Sculthorpe, Robert Blair, Jan Bracker, Patrick Flor, Nick Frisby, Adam Howell, Ryan Scott, and Michael Tabone)
+</small>
+</p>
+  
+# Compilers in the 1950's
+
+![](IBM704.jpg)
+
+- Batch processor compiler
+
+# Compilers in the 1960's
+
+![](CDC6600.jpg)
+
+- Batch processor compiler
+
+<i>http://en.wikipedia.org/wiki/CDC_6600</i>
+
+# Compilers in the 1970's
+
+![](AppleII.png)
+
+- Batch processor compiler
+
+# Compilers in the 1980's
+
+![](AtariST.jpg)
+
+- Batch processor compiler
+
+<i>&copy; Bill Bertram, 2006</i>
+
+- Batch processor compiler
+
+# ((Andrew's talk starts here))
 
 <h3>A Plugin for Transforming GHC Core Language Programs</h3>
 <p>
 <small>
   Andrew Farmer<br/>afarmer@ittc.ku.edu<br/><br/>
-  (joint work with Andy Gill, Ed Komp, Neil Sculthorpe, Robert Blair, Jan Bracker, Patrick Flor, Nick Frisby, Adam Howell, Ryan Scott, and Michael Tabone)
+  (joint work with Andrew Farmer, Neil Sculthorpe, Adam Howell, Robert Blair,
+  Ryan Scott, Patrick Flor, and Michael Tabone)
 </small>
 </p>
 
