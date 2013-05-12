@@ -26,7 +26,7 @@ htmlSlides = do
   authors <- getAuthors
   theme <- getTheme
   resourceDir <- getResourceDir
-  titleSlide <- htmlTitleSlide
+--  titleSlide <- htmlTitleSlide
   slideHead <- htmlSlideHead
   slides <- slidesToHtml 2
   return $H.docTypeHtml $ do
@@ -34,7 +34,7 @@ htmlSlides = do
     H.body $ H.div ! A.class_ (toValue "reveal")
            $ H.div ! A.class_ (toValue "slides")
            $ do
-      titleSlide
+--      titleSlide
       slides
       jsFile $ resourceDir </> "lib/js/head.min.js"
       jsFile $ resourceDir </> "js/reveal.min.js"
@@ -69,7 +69,7 @@ slidesToHtml initialHeadLevel = do
       subSlides <- mapGenHtml (slideToHtml $ hl + 1) subs
       return $ H.section $ do
         (if null subs then id else H.section) $ do
-          header hl $ headContent
+          H.h2 $ headContent
           content
         subSlides
 

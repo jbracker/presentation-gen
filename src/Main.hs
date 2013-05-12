@@ -48,21 +48,23 @@ generateSlides config =
     liftIO $ putStrLn $ "Parsing slide pandoc..."
     let slidePandoc = readMarkdown def slideMarkdown
         slides = pandocToSlides slidePandoc
+{-
         metaFile = baseDir </> slideDir </> slideName <.> "meta"
-    liftIO $ putStrLn $ "Reading meta data from: " ++ metaFile
-    metaE <- liftIO $ parseMetaFile metaFile
+   liftIO $ putStrLn $ "Reading meta data from: " ++ metaFile
+   metaE <- liftIO $ parseMetaFile metaFile
     case metaE of
       Left e -> liftIO $ do
         putStrLn $ "Failed to parse meta data for " ++ slideName
         putStrLn $ "ERROR: " ++ e
       Right meta -> do
-        liftIO $ putStrLn $ "Creating HTML data for slides..."
-        setSlides slides
-        setSlideMetaData meta
-        html <- htmlSlides
-        let targetFile = baseDir </> slideName <.> "html"
-        liftIO $ do
-          putStrLn $ "Writing slides to: " ++ targetFile
-          writeFile targetFile $ renderHtml html
-          return ()
+-}
+    liftIO $ putStrLn $ "Creating HTML data for slides..."
+    setSlides slides
+--    setSlideMetaData meta
+    html <- htmlSlides
+    let targetFile = baseDir </> slideName <.> "html"
+    liftIO $ do
+      putStrLn $ "Writing slides to: " ++ targetFile
+      writeFile targetFile $ renderHtml html
+      return ()
 

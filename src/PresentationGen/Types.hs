@@ -1,5 +1,5 @@
 
-module PresentationGen.Types 
+module PresentationGen.Types
   ( Slide(..), SlideConfig
   , MetaData
   , SlideM
@@ -22,7 +22,7 @@ import PresentationGen.Util
 -- Basic Slide Types
 -- -----------------------------------------------------------------------
 
-data Slide = Slide 
+data Slide = Slide
   { slideTitle :: [Inline]
   , slideContent :: [Block]
   , subSlides :: [Slide]
@@ -37,17 +37,17 @@ data SlideConfig = SlideConfig
   , slideDir_ :: FilePath
   , slides_ :: [Slide]
   , slideMetaData_ :: MetaData
-  } 
+  }
 
--- | Make a slide configuration from the Markdown and 
---   meta file with the given slide name in the given 
---   slide directory. The resource directory is the place 
+-- | Make a slide configuration from the Markdown and
+--   meta file with the given slide name in the given
+--   slide directory. The resource directory is the place
 --   shared resource like presentation JS and CSS file stored.
 --   Images are searched for in the slide directory.
 --   Both directories are relative to the base dir.
 --   Call: @makeSlideConfig baseDir slideName slideDir resourceDir@
 makeSlideConfig :: FilePath -> String -> FilePath -> FilePath -> SlideConfig
-makeSlideConfig baseDir slideName slideDir resourceDir = SlideConfig 
+makeSlideConfig baseDir slideName slideDir resourceDir = SlideConfig
   { baseDir_ = baseDir
   , resourceDir_ = resourceDir
   , slideName_ = slideName
@@ -98,36 +98,41 @@ getAuthors = do
          $ filter (fieldFilter ["Author", "Associated"]) meta
   where
     combineAuthorAssocs :: MetaData -> MetaData
-    combineAuthorAssocs (("Author", auth) : ("Associated", assoc) : xs) = 
+    combineAuthorAssocs (("Author", auth) : ("Associated", assoc) : xs) =
       (auth, assoc) : combineAuthorAssocs xs
-    combineAuthorAssocs (("Author", auth) : xs) = 
+    combineAuthorAssocs (("Author", auth) : xs) =
       (auth, "") : combineAuthorAssocs xs
     combineAuthorAssocs (x : xs) = combineAuthorAssocs xs
     combineAuthorAssocs [] = []
 
 getOrganisations :: SlideM [(Int, [String])]
 getOrganisations = do
-  meta <- getSlideMetaData 
+  meta <- getSlideMetaData
   return $ zip [1..]
          $ map ((`separateBy` '\n') . snd)
          $ filter (fieldFilter ["Organisation"]) meta
 
 getTitle :: SlideM (Maybe String)
 getTitle = do
+  return (Just "Slides")
+{-
   meta <- getSlideMetaData
-  return $ listToMaybe 
-         $ map snd 
+  return $ listToMaybe
+         $ map snd
          $ filter (fieldFilter ["Title"]) meta
+-}
 
 getTheme :: SlideM String
 getTheme = do
+  return "sky"
+{-
   meta <- getSlideMetaData
   return $ maybe "default" id
-         $ listToMaybe 
-         $ map snd 
+         $ listToMaybe
+         $ map snd
          $ filter (fieldFilter ["Theme"]) meta
 
-
+-}
 
 
 
