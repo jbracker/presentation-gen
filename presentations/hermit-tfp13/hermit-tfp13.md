@@ -35,7 +35,49 @@
 
 <i>&copy; Bill Bertram, 2006</i>
 
-- Batch processor compiler
+
+# Compiler **are** Batch Processors
+
+<BR>
+  
+- Compilers translate a computer language into something executable
+- Many innovations (features supported)
+- Optimization (Time, Space, Power)
+- Just-in-Time - small black boxes
+
+<BR>
+  
+<h3>So how **do** you interact with a compiler?</h3>
+<BR>
+<ul>
+<li class="fragment">
+Ask not what your favorite compiler can do for you,<BR>but what
+you can do for your favorite compiler.
+</li>
+
+# Example: Unrolling Fibonacci
+
+As a first example, let's transform the fib function by unrolling the recursive calls once.
+
+```haskell
+fib :: Int -> Int
+fib n = if n < 2
+           then 1
+           else fib (n - 1) + fib (n - 2)
+```
+
+<pre class="fragment">What the compiler does<code class="haskell">fib :: Int -> Int
+fib n = if n < 2
+           then 1
+           else (if (n - 1) < 2
+                    then 1
+                    else fib (n - 1 - 1) + fib (n - 1 - 2))
+                +
+                (if (n - 2) < 2
+                    then 1
+                    else fib (n - 2 - 1) + fib (n - 2 - 2))
+</code></pre>
+
 
 # ((Andrew's talk starts here))
 
