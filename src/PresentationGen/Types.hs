@@ -124,7 +124,7 @@ getTitle = do
 
 getTheme :: SlideM String
 getTheme = do
-  return "simple"
+  return "ku-fpg"
 {-
   meta <- getSlideMetaData
   return $ maybe "default" id
