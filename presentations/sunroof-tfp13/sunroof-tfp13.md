@@ -52,8 +52,6 @@ We want to utilize the browser's capabilities!
 <li class="fragment">Ready to use server</li>
 </ul>
 
-# How does Sunroof work?
-
 ## Example
 
 ```haskell
@@ -80,6 +78,8 @@ var v0 = prompt("Your name?");
 alert("Your name: " + v0);
 ```
 </div>
+
+# How does Sunroof work?
 
 # JS-Monad: `JS t a`
 
@@ -138,7 +138,37 @@ class Sunroof a where
 
 # Foreign Function Interface
 
-TODO
+<div class="fragment">
+```javascript
+document.getElementById("id")
+```
+</div>
+<div class="fragment">
+becomes:
+
+```haskell
+object "document" # invoke "getElementById" "id"
+```
+
+```haskell
+object :: String -> JSObject
+invoke :: (...) => String -> a -> o -> JS t r
+(#)    :: o -> (o -> JS t r) -> JS t r
+```
+</div>
+
+<div class="fragment">
+Creating a binding:
+
+```haskell
+alert :: JSString -> JS t ()
+alert s = fun "alert" `apply` s
+```
+
+```haskell
+fun :: (...) => String -> JSFunction a r
+```
+</div>
 
 # Compiler
 
