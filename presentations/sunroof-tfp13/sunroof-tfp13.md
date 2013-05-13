@@ -1,5 +1,6 @@
 # Sunroof 
 <h3>A Monadic DSL to Generate JavaScript</h3>
+<p><small>15th May 2013</small></p>
 <p>
   <small>Jan Bracker<sup>1,2</sup> and Andy Gill<sup>1</sup></small>
 </p>
