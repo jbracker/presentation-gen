@@ -44,15 +44,7 @@ We want to utilize the browser's capabilities!
 <li class="fragment">Platform for hybrid Haskell/JavaScript applications</li>
 </ul>
 
-## Features
-
-<ul>
-<li class="fragment">Types</li>
-<li class="fragment">Haskell-style (cooperative) concurrency</li>
-<li class="fragment">Ready to use server</li>
-</ul>
-
-## Example
+# Example
 
 ```haskell
 jsCode :: JS t ()
@@ -60,15 +52,6 @@ jsCode = do
     name <- prompt "Your name?"
     alert ("Your name: " <> name)
 ```
-
-<div class="fragment">
-Types:
-
-```haskell
-prompt :: JSString -> JS t JSString
-alert  :: JSString -> JS t ()
-```
-</div>
 
 <div class="fragment">
 Produces:
@@ -79,48 +62,117 @@ alert("Your name: " + v0);
 ```
 </div>
 
-# How does Sunroof work?
+<div class="fragment">
+Types:
 
-# JS-Monad: `JS t a`
+```haskell
+prompt :: JSString -> JS t JSString
+alert  :: JSString -> JS t ()
+```
+</div>
 
+## JS-Monad
+
+```haskell
+jsCode :: JS t ()
+jsCode = do
+    name <- prompt "Your name?"
+    alert ("Your name: " <> name)
+```
+ 
  * Captures side-effects and imperative nature of JavaScript
  * Offers two threading models, specified by `t`
+ * Bind becomes assigment in JavaScript
 
-## JS-Monad: Problem
-
-How do we constrain it to JavaScript types?
+<div class="fragment">
+*How do we constrain it to JavaScript types?*
 
  * Normalize monad through Operational
- * Allows use to constain involved types (Sculthorpe, 2013)
+ * Allows us to constain involved types (Sculthorpe, 2013)
+</div>
 
+## Types and the Object Model
 
-# Object Model
+```haskell
+prompt :: JSString -> JS t JSString
+alert  :: JSString -> JS t ()
+```
 
- * Untypes expression language
+<div class="fragment">
+ * We use Haskell to type check JavaScript
+ * Hidden untyped expression language
    
 ```haskell
 data Expr = Var Id | Apply Expr [Expr] | ...
 ```
+</div>
  
- * Types are wrappers of expressions
-   that implement `Sunroof` class
+<div class="fragment">
+ * Types wrap expressions and implement `Sunroof` class
    
 ```haskell
 class Sunroof a where
   box   :: Expr -> a
   unbox :: a -> Expr
 ```
+</div>
  
+<div class="fragment">
  * Allows new types to be added later (Svenningsson, 2012)
+</div>
 
 # Functions
 
+```haskell
+square :: JS t (JSFunction JSNumber JSNumber)
+square = function $ \x -> return (x * x)
+```
+
+<div class="fragment">
+```haskell
+jsCode = do
+  sqr <- square  -- Create / Bind
+  n <- sqr $$ 2  -- Use
+  alert $ cast n -- Output
+```
+</div>
+
+<div class="fragment">
+Types:
+
+```haskell
+function :: (...) => (a -> JS A r) 
+                  -> JS t (JSFunction a r)
+($$)     :: (...) => JSFunction a r 
+                  -> a -> JS t r
+```
+</div>
+
+## Functions
+
+```haskell
+square :: JS t (JSFunction JSNumber JSNumber)
+square = function $ \x -> return (x * x)
+
+jsCode = do
+  sqr <- square  -- Create / Bind
+  n <- sqr $$ 2  -- Application
+  alert $ cast n -- Output
+```
+
  * Functions are values in Haskell and JavaScript
- * Sunroof embeds this connection:
-   ![](sunroof-func-cont.png)
+ * Observable sharing makes creation a side-effect
  * Allows direct translation to JavaScript
+
+## Continuations
+
  * Continuations needed for second threading model
  * `JS`-monad is a continuation monad (Claessen, 1999)
+
+<div class="fragment">
+*Sunroof embeds connection between both languages:*
+![](sunroof-func-cont.png)
+</div>
 
 # Threading Models
 
@@ -130,6 +182,12 @@ class Sunroof a where
  * One thread with event loop
 
 ## Model B: Blocking
+
+```haskell
+jsCode = do
+  
+```
+
  * Adds cooperative concurrency to Sunroof
  * Offers abstractions known from Haskell: 
     * `forkJS` and `yield`
@@ -139,6 +197,8 @@ class Sunroof a where
 # Foreign Function Interface
 
 <div class="fragment">
+Inlining:
+
 ```javascript
 document.getElementById("id")
 ```
@@ -157,6 +217,7 @@ invoke :: (...) => String -> a -> o -> JS t r
 ```
 </div>
 
+# Foreign Function Interface
 <div class="fragment">
 Creating a binding:
 
