@@ -87,7 +87,7 @@ alert  :: JSString -> JS ()
 # JS-Monad
 
 ```haskell
-jsCode :: JS t ()
+jsCode :: JS ()
 jsCode = do
     name <- prompt "Your name?"
     alert ("Your name: " <> name)
@@ -95,7 +95,7 @@ jsCode = do
 
 <ul>
 <li class="fragment">Captures side-effects and sequences of statements</li>
-<li class="fragment">Offers two threading models, specified by `t`</li>
+<li class="fragment">Binding is translated to assignment of fresh variable</li>
 </ul>
 
 <div class="fragment">
