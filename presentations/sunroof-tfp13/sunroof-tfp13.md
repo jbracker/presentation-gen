@@ -115,7 +115,8 @@ JS t a
 </div>
 
 <ul>
-<li class="fragment">`t` determines the threading used.</li>
+<li class="fragment">`t` determines the threading model used</li>
+<li class="fragment">`t` can either be `A` or `B`</li>
 </ul>
 
 # Model A: Atomic
@@ -189,19 +190,25 @@ callcc :: (...) => (JSContinuation a -> JS B a)
 ![](sunroof-func-cont.png)
 </li>
 
-# Foreign Function Interface
+# Calling JavaScript: Inline
 
 <div class="fragment">
+JavaScript:
+
 ```javascript
-document.getElementById("id")
+document.getElementById("n")
 ```
 </div>
 <div class="fragment">
 becomes:
 
 ```haskell
-object "document" # invoke "getElementById" "id"
+object "document" # invoke "getElementById" "n"
 ```
+</div>
+
+<div class="fragment">
+Types:
 
 ```haskell
 object :: String -> JSObject
@@ -210,6 +217,8 @@ invoke :: (...) => String -> a -> o -> JS t r
 ```
 </div>
 
+# Calling JavaScript: Bindings
+
 <div class="fragment">
 Creating a binding:
 
@@ -217,6 +226,10 @@ Creating a binding:
 alert :: JSString -> JS t ()
 alert s = fun "alert" `apply` s
 ```
+</div>
+
+<div class="fragment">
+Types:
 
 ```haskell
 fun :: (...) => String -> JSFunction a r
@@ -225,15 +238,18 @@ fun :: (...) => String -> JSFunction a r
 
 # Server
 
- * Allows to execute Sunroof code in the browser
+<ul>
+<li class="fragment">Allows to execute Sunroof code in the browser</li>
+</ul>
+
+<div class="fragment">
+ * Ability to interleave Haskell and JavaScript
 
 ```haskell
 syncJS  :: ... -> JS t a  -> IO (ResultOf a)
 asyncJS :: ... -> JS t () -> IO ()
 ```
- 
- * Ability to interleave Haskell and JavaScript
-
+</div>
 
 # Case Study: A small calculator
 
@@ -245,12 +261,13 @@ asyncJS :: ... -> JS t () -> IO ()
 
 # Conclusion
 
- * Write JavaScript in Haskell
- * Type-safety
- * Foreign-function interface
- * Excute JavaScript from Haskell
- * Generate JavaScript when needed
-
+<ul>
+<li class="fragment">Generate JavaScript as needed in Haskell</li>
+<li class="fragment">Type-safety through static types</li>
+<li class="fragment">Foreign-function interface to JavaScript</li>
+<li class="fragment">A threading model similar to Haskell's</li>
+<li class="fragment">Excute JavaScript in the browser from Haskell</li>
+</ul>
 
 
 
