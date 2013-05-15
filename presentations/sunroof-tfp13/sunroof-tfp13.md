@@ -44,14 +44,18 @@ Platform for hybrid Haskell/JavaScript browser-based applications
 We want to utilize the browser's capabilities!
 </p>
 
+# How is Sunroof used?
+
+![](example-structure.png)
+
 # How does Sunroof look?
 
 <div class="fragment">
 JavaScript:
 
 ```javascript
-var v0 = prompt("Your name?");
-alert("Your name: " + v0);
+var name = prompt("Your name?");
+alert("Your name: " + name);
 ```
 </div>
 
@@ -59,8 +63,7 @@ alert("Your name: " + v0);
 Sunroof:
 
 ```haskell
-jsCode :: JS ()
-jsCode = do
+do  
     name <- prompt "Your name?"
     alert ("Your name: " <> name)
 ```
@@ -78,13 +81,8 @@ alert  :: JSString -> JS ()
 ```
 </div>
 
-<ul>
-<li class="fragment">Types are wrappers of an untyped expression language</li>
-<li class="fragment">and implement the `Sunroof` class</li>
-<li class="fragment">Allows new types to be added later</li>
-</ul>
-
-# JS-Monad
+<div class="fragment">
+ * JS-monad:
 
 ```haskell
 jsCode :: JS ()
@@ -92,22 +90,39 @@ jsCode = do
     name <- prompt "Your name?"
     alert ("Your name: " <> name)
 ```
+</div>
 
 <ul>
 <li class="fragment">Captures side-effects and sequences of statements</li>
 <li class="fragment">Binding is translated to assignment of fresh variable</li>
 </ul>
 
-<div class="fragment">
-_How do we constrain it to JavaScript types?_
 
- * Normalize and reify the monad
+# Constraining the JS-Monad
+
+<div class="fragment">
+
+```haskell
+(>>=) :: JS a -> (a -> JS b) -> JS b
+```
 </div>
+
+<ul>
+<li class="fragment">We need to know that "`a`" is a JavaScript type</li>
+</ul>
+
+<div class="fragment"><br>
+_How do we constrain it?_
+</div>
+
+<ul>
+<li class="fragment">Normalize and reify the monad</li>
+</ul>
 
 # Threading Models
 
 <div class="fragment">
-Actually the `JS`-monad has another type parameter `t`:
+Actually the `JS` data type has another type parameter `t`:
 
 ```haskell
 JS t a
@@ -125,6 +140,7 @@ JS t a
 <li class="fragment">The JavaScript threading model</li>
 <li class="fragment">Callback centric</li>
 <li class="fragment">One thread with event loop</li>
+<li class="fragment">Executed code in loop is uninteruptable</li>
 </ul>
 
 # Model B: Blocking
@@ -142,26 +158,31 @@ JS t a
 
 # Functions
 
-```haskell
-square :: JS t (JSFunction JSNumber JSNumber)
-square = function $ \x -> return (x * x)
-```
-
 <div class="fragment">
-```haskell
-jsCode = do
-  sqr <- square       -- Create / Bind
-  n <- sqr `apply` 2  -- Use
-  alert $ cast n      -- Output
-```
-</div>
 
-<div class="fragment">
 ```haskell
 function :: (...) => (a -> JS A r) 
                   -> JS t (JSFunction a r)
 apply    :: (...) => JSFunction a r 
                   -> a -> JS t r
+```
+</div>
+
+<div class="fragment">
+
+```haskell
+square :: JS t (JSFunction JSNumber JSNumber)
+square = function $ \x -> return (x * x)
+```
+</div>
+
+<div class="fragment">
+
+```haskell
+jsCode = do
+  sqr <- square       -- Create / Bind
+  n <- sqr `apply` 2  -- Use
+  ...
 ```
 </div>
 
@@ -172,7 +193,7 @@ apply    :: (...) => JSFunction a r
 <li class="fragment">`JS`-monad is a continuation monad</li>
 </ul>
 <div class="fragment">
- * We have access to the underlying cont. in JavaScript
+ * We have access to the underlying continuations in JavaScript
 
 ```haskell
 callcc :: (...) => (JSContinuation a -> JS B a)
@@ -239,15 +260,15 @@ fun :: (...) => String -> JSFunction a r
 # Server
 
 <ul>
-<li class="fragment">Allows to execute Sunroof code in the browser</li>
+<li class="fragment">Allows execution of Sunroof code in the browser</li>
 </ul>
 
 <div class="fragment">
  * Ability to interleave Haskell and JavaScript
 
 ```haskell
-syncJS  :: ... -> JS t a  -> IO (ResultOf a)
-asyncJS :: ... -> JS t () -> IO ()
+syncJS :: Context -> JS t a  -> IO (ResultOf a)
+asyncJS:: Context -> JS t () -> IO ()
 ```
 </div>
 
@@ -255,9 +276,23 @@ asyncJS :: ... -> JS t () -> IO ()
 
 ![The example application](example-application.png)
 
-# Case Study: Structure
-
-![](example-structure.png)
+<table>
+<tr class="fragment">
+<th></th> <th class="right">Lines</th> <th class="right">Percentage</th>
+</tr>
+<tr class="fragment">
+<td>Response loop</td> <td class="right">25</td> <td class="right">6.5%</td>
+</tr>
+<tr class="fragment">
+<td>Data conversion</td> <td class="right">85</td> <td class="right">22.0%</td>
+</tr>
+<tr class="fragment">
+<td>Rendering</td> <td class="right">190</td> <td class="right">49.5%</td>
+</tr>
+<tr class="fragment">
+<td>Parsing & evaluation</td> <td class="right">85</td> <td class="right">22.0%</td>
+</tr>
+</table>
 
 # Conclusion
 
@@ -267,6 +302,7 @@ asyncJS :: ... -> JS t () -> IO ()
 <li class="fragment">Foreign-function interface to JavaScript</li>
 <li class="fragment">A threading model similar to Haskell's</li>
 <li class="fragment">Excute JavaScript in the browser from Haskell</li>
+<li class="fragment">Foundation for higher-level libraries</li>
 </ul>
 
 
