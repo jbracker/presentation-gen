@@ -44,7 +44,7 @@ Platform for hybrid Haskell/JavaScript browser-based applications
 We want to utilize the browser's capabilities!
 </p>
 
-# How is Sunroof used?
+# What does Sunroof offer?
 
 ![](example-structure.png)
 
