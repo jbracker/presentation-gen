@@ -1,10 +1,15 @@
 
 {-# LANGUAGE OverloadedStrings #-}
 
+import Prelude hiding ( readFile, writeFile )
+
 import Data.Default
 import Data.List
 import Data.String
 import Data.Maybe
+import Data.ByteString ( readFile, writeFile )
+import Data.Text ( unpack, pack )
+import Data.Text.Encoding ( decodeUtf8, encodeUtf8 )
 
 import Control.Monad
 import Control.Monad.IO.Class
@@ -34,7 +39,11 @@ main = do
     let config = makeSlideConfig baseDir pres (presDir </> pres) resDir
     generateSlides config
 
+readFileUtf8 :: FilePath -> IO String
+readFileUtf8 file = (unpack . decodeUtf8) `fmap` readFile file
 
+writeFileUtf8 :: FilePath -> String -> IO ()
+writeFileUtf8 file content = writeFile file $ encodeUtf8 $ pack content
 
 generateSlides :: SlideConfig -> IO ()
 generateSlides config =
@@ -44,7 +53,7 @@ generateSlides config =
     slideDir <- getSlideDir
     let slideFile = baseDir </> slideDir </> slideName <.> "md"
     liftIO $ putStrLn $ "Reading slides from: " ++ slideFile
-    slideMarkdown <- liftIO $ readFile slideFile
+    slideMarkdown <- liftIO $ readFileUtf8 slideFile
     liftIO $ putStrLn $ "Parsing slide pandoc..."
     let slidePandoc = readMarkdown def slideMarkdown
         slides = pandocToSlides slidePandoc
@@ -65,6 +74,6 @@ generateSlides config =
     let targetFile = baseDir </> slideName <.> "html"
     liftIO $ do
       putStrLn $ "Writing slides to: " ++ targetFile
-      writeFile targetFile $ renderHtml html
+      writeFileUtf8 targetFile $ renderHtml html
       return ()
 
