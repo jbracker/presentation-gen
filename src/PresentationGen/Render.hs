@@ -6,6 +6,7 @@ module PresentationGen.Render
 import Data.List
 import Data.Maybe
 import Data.String
+import Data.Monoid
 
 import Control.Monad
 
@@ -187,6 +188,8 @@ blockToHtml b = case b of
     Null -> return $ return ()
     HorizontalRule -> return $ H.hr
     RawBlock tag s -> return $ preEscapedToMarkup s
+    -- TODO: Handle other cases.
+    _ -> return $ mempty
 
   where
     listItem :: [Block] -> SlideM Html
@@ -229,6 +232,8 @@ inlineToHtml l = case l of
     return $ H.a ! A.href (toValue url)
                  ! A.title (toValue t)
                  $ content
+  -- TODO: Handle other cases.
+  _ -> return $ mempty
 
 inlineToString :: Inline -> String
 inlineToString l = case l of
@@ -237,6 +242,8 @@ inlineToString l = case l of
   Space -> " "
   Code _ c -> c
   Image alt (url, t) -> url
+  -- TODO: Handle other cases.
+  _ -> ""
 
 makeImageLink :: String -> SlideM String
 makeImageLink img = do
