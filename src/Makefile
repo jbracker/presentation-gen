@@ -1,7 +1,7 @@
 
 Main: *.hs **/*.hs
 	ghc --make Main.hs -o Main -threaded \
-             -fforce-recomp -dcore-lint -odir dist/ -hidir dist/
+		-fforce-recomp -dcore-lint -odir dist/ -hidir dist/
 
 run: Main
 	./Main "../"
