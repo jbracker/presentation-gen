@@ -188,6 +188,12 @@ blockToHtml b = case b of
     Null -> return $ return ()
     HorizontalRule -> return $ H.hr
     RawBlock tag s -> return $ preEscapedToMarkup s
+    Div attr content -> do
+      let (ident, cls, _attrs) = attr
+      innerHtml <- blocksToHtml content
+      return $ H.div ! A.id (toValue ident) 
+                     ! A.class_ (toValue $ intercalate " " cls)
+             $ innerHtml
     -- TODO: Handle other cases.
     _ -> return $ mempty
 
