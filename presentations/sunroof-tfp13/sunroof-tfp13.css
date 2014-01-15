@@ -5,6 +5,10 @@ sup {
   font-size: 80% !important;
 }
 
+.right {
+  text-align: right !important;
+}
+
 h1,h2,h3,h4,h5,h6 {
   text-transform: none !important;
 }
@@ -19,4 +23,26 @@ h2,h3,h4,h5,h6 {
 
 img {
   border: none !important ;
+}
+
+section {
+  text-align: left;
+}
+
+pre code {
+  font-size: 1.5em !important;
+  line-height: 1.5em !important;
+}
+
+p, li {
+  line-height: 1.5em !important;
+}
+
+th, td {
+  padding-right: 2em !important;
+  margin: 0px !important;
+}
+
+th {
+  border-bottom: solid 0.1em black !important;
 }

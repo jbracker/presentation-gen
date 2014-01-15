@@ -1,5 +1,5 @@
- 
-module PresentationGen.Render 
+
+module PresentationGen.Render
   ( htmlSlides, pandocToSlides
   ) where
 
@@ -26,7 +26,7 @@ htmlSlides = do
   authors <- getAuthors
   theme <- getTheme
   resourceDir <- getResourceDir
-  titleSlide <- htmlTitleSlide
+--  titleSlide <- htmlTitleSlide
   slideHead <- htmlSlideHead
   slides <- slidesToHtml 2
   return $H.docTypeHtml $ do
@@ -34,7 +34,7 @@ htmlSlides = do
     H.body $ H.div ! A.class_ (toValue "reveal")
            $ H.div ! A.class_ (toValue "slides")
            $ do
-      titleSlide
+--      titleSlide
       slides
       jsFile $ resourceDir </> "lib/js/head.min.js"
       jsFile $ resourceDir </> "js/reveal.min.js"
@@ -69,7 +69,7 @@ slidesToHtml initialHeadLevel = do
       subSlides <- mapGenHtml (slideToHtml $ hl + 1) subs
       return $ H.section $ do
         (if null subs then id else H.section) $ do
-          header hl $ headContent
+          H.h2 $ headContent
           content
         subSlides
 
@@ -104,7 +104,7 @@ htmlSlideHead = do
     <script>
       document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
     </script>
-    
+
     <!--[if lt IE 9]>
     <script src="lib/js/html5shiv.js"></script>
     <![endif]-->
@@ -125,16 +125,16 @@ htmlTitleSlide = do
         1 -> sequence_ authors
         n -> do
           sequence_ (intersperse (fromString ", ") (init authors))
-          fromString " and " 
+          fromString " and "
           last authors
     seqMap orgToHtml organisations
   where
     authorToHtml :: (String, [Int]) -> Html
     authorToHtml (auth, []) = fromString auth
     authorToHtml (auth, assoc) = do
-      fromString auth 
-      H.sup $ fromString $ intercalate "," $ map show assoc 
-    
+      fromString auth
+      H.sup $ fromString $ intercalate "," $ map show assoc
+
     orgToHtml :: (Int, [String]) -> Html
     orgToHtml (n, org) = H.p $ H.small $ H.address $ do
       H.sup $ toHtml n
@@ -156,7 +156,7 @@ parseSlides bs =
   let (_, headsConts) = groupSplit (isHeader 1) bs
   in fmap zipFunc headsConts
   where zipFunc :: (Block, [Block]) -> Slide
-        zipFunc (Header n _ h, c) = 
+        zipFunc (Header n _ h, c) =
           let (cont, headsConts) = groupSplit (isHeader (n+1)) c
           in Slide h cont (fmap zipFunc headsConts)
 
@@ -164,7 +164,7 @@ mapGenHtml :: (a -> SlideM Html) -> [a] -> SlideM Html
 mapGenHtml f l = mapM f l >>= foldM (\a b -> return $ a >> b) (return ())
 
 blocksToHtml :: [Block] -> SlideM Html
-blocksToHtml = mapGenHtml blockToHtml 
+blocksToHtml = mapGenHtml blockToHtml
 
 blockToHtml :: Block -> SlideM Html
 blockToHtml b = case b of
@@ -182,10 +182,12 @@ blockToHtml b = case b of
       content <- mapGenHtml listItem l
       return $ H.ol $ content
     CodeBlock (_, hClasses, _) c -> do
-      return $ H.pre $ H.code ! A.class_ (toValue $ intercalate " " hClasses) 
+      return $ H.pre $ H.code ! A.class_ (toValue $ intercalate " " hClasses)
                      $ toHtml c
     Null -> return $ return ()
     HorizontalRule -> return $ H.hr
+    RawBlock tag s -> return $ preEscapedToMarkup s
+
   where
     listItem :: [Block] -> SlideM Html
     listItem i = do
@@ -193,7 +195,7 @@ blockToHtml b = case b of
       return $ H.li $ content
 
 inlinesToHtml :: [Inline] -> SlideM Html
-inlinesToHtml = mapGenHtml inlineToHtml 
+inlinesToHtml = mapGenHtml inlineToHtml
 
 inlineToHtml :: Inline -> SlideM Html
 inlineToHtml l = case l of
@@ -216,7 +218,7 @@ inlineToHtml l = case l of
     content <- inlinesToHtml t
     return $ H.em $ content
   Code _ c -> return $ H.code $ fromString c
-  RawInline _ s -> return $ H.code $ fromString s
+  RawInline _ s -> return $ preEscapedToMarkup s
   Image alt (url, t) -> do
     realUrl <- makeImageLink url
     return $ H.img ! A.alt (toValue $ concatMap inlineToString alt)
@@ -239,8 +241,8 @@ inlineToString l = case l of
 makeImageLink :: String -> SlideM String
 makeImageLink img = do
   slideDir <- getSlideDir
-  return $ if isExternalURI img 
-     then img 
+  return $ if isExternalURI img
+     then img
      else slideDir </> img
 
 -- -----------------------------------------------------------------------
@@ -248,20 +250,20 @@ makeImageLink img = do
 -- -----------------------------------------------------------------------
 
 metaTag :: String -> String -> Html
-metaTag name content = H.meta ! A.name (toValue name) 
+metaTag name content = H.meta ! A.name (toValue name)
                               ! A.content (toValue content)
 
 linkTag :: String -> String -> Html
-linkTag rel href = H.link ! A.rel (toValue rel) 
+linkTag rel href = H.link ! A.rel (toValue rel)
                           ! A.href (toValue href)
 
 jsFile :: FilePath -> Html
 jsFile file = H.script ! A.type_ (toValue "text/javascript")
-                       ! A.src (toValue file) 
+                       ! A.src (toValue file)
                        $ return ()
 
 jsSource :: String -> Html
-jsSource src = H.script ! A.type_ (toValue "text/javascript") 
+jsSource src = H.script ! A.type_ (toValue "text/javascript")
                         $ fromString src
 
 header :: Int -> Html -> Html
