@@ -2,3 +2,5 @@
 *.html
 src/dist
 src/Main
+.cabal-sandbox
+cabal.sandbox.config
