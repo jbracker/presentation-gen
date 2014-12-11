@@ -1,0 +1,80 @@
+Name:                presentation-gen
+Version:             0.0.1
+Synopsis:            Generate presentations from Markdown using reveal.js
+Homepage:            https://github.com/jbracker/presentation-gen
+Bug-reports:         https://github.com/jbracker/presentation-gen/issues
+License:             GPL
+License-file:        LICENSE
+Author:              Jan Bracker <jbra@informatik.uni-kiel.de>
+Maintainer:          Jan Bracker <jbra@informatik.uni-kiel.de>
+Copyright:           (c) 2013 The University of Kansas
+Category:            Web, Language, Embedded, Compiler, Javascript
+Build-type:          Simple
+Cabal-version:       >= 1.10
+Description:
+  Example applications of the sunroof-compiler and sunroof-server package.
+
+data-files:
+  resources/css/print/paper.css
+  resources/css/print/pdf.css
+  
+  resources/css/theme/ku-fpg.css
+  resources/css/reveal.min.css
+  
+  resources/js/reveal.min.js
+  
+  resources/lib/css/idea.css
+  resources/lib/css/zenburn.css
+  resources/lib/font/league_gothic-webfont.eot
+  resources/lib/font/league_gothic-webfont.svg
+  resources/lib/font/league_gothic-webfont.ttf
+  resources/lib/font/league_gothic-webfont.woff
+  resources/lib/font/league_gothic_license
+  resources/lib/js/classList.js
+  resources/lib/js/head.min.js
+  resources/lib/js/html5shiv.js
+  
+  resources/plugin/highlight/highlight.js
+  resources/plugin/highlight/highlight.pack.js
+  resources/plugin/markdown/markdown.js
+  resources/plugin/markdown/showdown.js
+  resources/plugin/multiplex/client.js
+  resources/plugin/multiplex/index.js
+  resources/plugin/multiplex/master.js
+  resources/plugin/notes/notes.js
+  resources/plugin/print-pdf/print-pdf.js
+  resources/plugin/zoom-js/zoom.js
+
+Extra-source-files:
+  COPYING
+  Makefile
+
+source-repository head
+  type:     git
+  location: git@github.com:jbracker/presentation-gen.git
+
+Executable presentation-gen
+  Other-Modules:
+    PresentationGen.MetaParser
+    PresentationGen.Render
+    PresentationGen.Types
+    PresentationGen.Util
+  Build-Depends: 
+    base                   >= 4.6,
+    network                >= 2.6,
+    network-uri            >= 2.6,
+    pandoc                 >= 1.11,
+    blaze-html             >= 0.6,
+    blaze-markup           >= 0.5.1,
+    attoparsec             >= 0.10,
+    text                   >= 1.0,
+    bytestring             >= 0.9,
+    data-default           >= 0.5.3,
+    filepath               >= 1.3,
+    directory              >= 1.2,
+    mtl                    >= 2.1,
+    transformers           >= 0.3
+  Main-is: Main.hs
+  Hs-Source-Dirs: src
+  Ghc-Options: -threaded
+  default-language:    Haskell2010
